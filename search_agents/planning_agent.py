@@ -1,6 +1,6 @@
 from agents import Agent, ModelSettings
 from configs.llm_configs import llm_model
-from research_agents import search_agent
+from search_agents.research_agent import search_agent
 
 
 instructions = """
@@ -15,6 +15,5 @@ planning_agent = Agent(
     instructions=instructions,
     model=llm_model,
     handoffs=[search_agent],
-    model_settings=ModelSettings(tool_choice="auto")
-
+    model_settings=ModelSettings(tool_choice="required")
 )
