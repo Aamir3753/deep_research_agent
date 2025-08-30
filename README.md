@@ -4,7 +4,7 @@
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/DeepResearchAgent.git
+    git clone https://github.com/Aamir3753/deep_research_agent.git
     cd DeepResearchAgent
     ```
 2. **Install dependencies:**
