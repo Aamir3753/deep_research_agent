@@ -7,10 +7,19 @@
     git clone https://github.com/Aamir3753/deep_research_agent.git
     cd DeepResearchAgent
     ```
-2. **Install dependencies:**
+2. **Install dependencies with uv:**
     ```bash
-    pip install -r requirements.txt
+    uv pip install -e .
     ```
+
+3. **Run the project using uv:**
+    ```bash
+    uv venv
+    uv pip install -e .
+    uv run python main.py
+    ```
+    ```
+    
 3. **Configure environment variables:**  
     Edit `.env` with your API keys and settings.
 
