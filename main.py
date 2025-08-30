@@ -1,39 +1,43 @@
-from agents import Agent, OpenAIChatCompletionsModel, AsyncOpenAI, Runner, function_tool
-from dotenv import find_dotenv, load_dotenv
-from tavily import TavilyClient
-import os
+from agents import Agent, Runner, SQLiteSession, function_tool, ModelSettings
 
-load_dotenv(find_dotenv())
+from datetime import datetime
+from planning_agent import planning_agent
+from configs.llm_configs import llm_model
 
-external_client = AsyncOpenAI(
-    api_key=os.environ.get("GEMINI_API_KEY"),
-    base_url=os.environ.get("GEMINI_API_HOST"),
-)
+session_id = "user_" + str(datetime.now().timestamp())
 
+session = SQLiteSession(session_id, "converstions.db")
 
-llm_model = OpenAIChatCompletionsModel(
-    openai_client=external_client,
-    model="gemini-1.5-flash",
-)
+instructions = """
+You are a requirement gathering agent.
+Your task is to gather requirements  based on their search query.
+You will ask clarifying questions if necessary using the get_user_input 
+and will handof to the planning agent for getting detailed plan.
+"""
 
 
 @function_tool
-def search_internet(search_query: str):
-    tavily_client = TavilyClient(api_key=os.environ.get("TAVILY_API_KEY"))
-    response = tavily_client.search(query=search_query, max_results=5)
-    print(response)
-    return response
+def get_user_input(query: str) -> str:
+    """Function to get user input based on a query."""
+    print(f"[Server: f{query}]")
+    return input(f"{query}\nUser: ")
 
 
-search_agent = Agent(
-    name="Search Agent",
-    instructions="An agent that can search the web for realtime information",
+deep_research_system = Agent(
+    name="Riequirement Gathering Agent",
+    instructions=instructions,
     model=llm_model,
-    tools=[search_internet]
+    tools=[get_user_input],
+    handoffs=[planning_agent],
+    model_settings=ModelSettings(tool_choice="required")
 )
+
+user_prompt = input("Enter your search query: ")
 
 
 search_resp = Runner.run_sync(
-    starting_agent=search_agent, input="What is the dollar to PKR rate?",)
+    starting_agent=deep_research_system, input=user_prompt,
+    session=session
+)
 
-print(search_resp.final_output)
+print(f"[Server : {search_resp.final_output}]")
