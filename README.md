@@ -25,7 +25,6 @@
 - How does transformer architecture improve NLP tasks?
 - What are the ethical implications of autonomous agents?
 
-## Agent Roles
 
 ## Agent Roles
 
@@ -34,12 +33,7 @@
 - **Search Agent:** Finds relevant information from academic sources and web articles.
 - **Reporting Agent:** Compiles findings and insights into structured reports.
 
-## System Workflow Demo
+## Working Demo
 
 ![Working Demo](assets/Agent_Demo.gif)
 
-## Team Coordination
-
-Agents communicate via a shared message queue.  
-Each agent posts updates and requests to the queue, enabling asynchronous collaboration.  
-The system orchestrator assigns tasks and monitors progress, ensuring efficient workflow and timely completion.
